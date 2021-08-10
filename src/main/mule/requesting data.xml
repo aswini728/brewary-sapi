@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:request-config name="HTTP_Request_configuration1" doc:name="HTTP Request configuration" doc:id="f354681b-55c5-496f-a868-2751f043dc4d" >
+		<http:request-connection host="api.openbrewerydb.org" />
+	</http:request-config>
+	<flow name="requesting_dataFlow" doc:id="6fd368c3-dc1a-4ec9-a96a-5db16679b368" >
+		<http:request method="GET" doc:name='Requesting "api.openbrewerydb.org"' doc:id="84a5526a-4475-4d73-ac7b-1a6ad92295e9" path="/breweries" config-ref="HTTP_Request_configuration1"/>
+		<ee:transform doc:name="extracting brewary data" doc:id="d49118f1-a209-4b7c-9d83-901c140fe9a6" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="printing success message" doc:id="c78316d7-9736-4ee8-8830-625584783d72" message='#["sucess"]' />
+	</flow>
+</mule>
